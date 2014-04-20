@@ -1,0 +1,96 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class SelectionSort {
+	
+	public static void main(String []args){
+		 Scanner entrada = new Scanner(System.in);
+		 int opcao;
+		 int valor[]= new int[10];
+		 
+        do{
+            menu();
+            opcao = entrada.nextInt();
+            
+            switch(opcao){
+            case 1:
+                Incluir(valor);
+                break;
+            case 2:
+                Ordenar(valor);
+                break;
+            case 3:
+                Consultar(valor);
+                break;
+            case 4:
+            	Sair();
+            	break;
+            default:
+                System.out.println("Opção inválida.");
+            }
+        } while(opcao != 0);
+    }
+
+	public   static void Sair(){
+		System.out.println("---------- FINALIZANDO O APLICATIVO ----------");
+	}
+	
+	public static void insertionSort(int a[]) {
+		 for (int i=1;i< a.length;i++) {
+			 for (int j=i;j>0;j--){
+				 if (a[j]< a[j-1]) {
+					 int temp = a[j];
+					 a[j] = a[j-1];
+					 a[j-1] = temp;
+				 }
+				 else {
+					 break;
+				 }
+			 } 
+		 } 
+	 }
+ 
+	 public static void menu(){
+	        System.out.println("\tTrabalho SelectionSort");
+	        System.out.println("1. Incluir");
+	        System.out.println("2. Ordenar");
+	        System.out.println("3. Consultar");
+	        System.out.println("4. Sair");
+	        System.out.println("Opcao:");
+	 }
+	 public static void Incluir(int valor[]){
+		Scanner entrada = new  Scanner(System.in);
+		for (int i = 0; i <10; i++) {
+			System.out.println("Informe o valor: ");
+			valor[i] =  entrada.nextInt();
+		}
+	 }
+	 
+	 public static  void Ordenar(int valor[])
+	 {
+		 for (int i=0;i< valor.length-1;i++)
+		 {
+			int menor = i;
+			for (int j=i+1;j< valor.length;j++) 
+			{
+				 if (valor[j]< valor[menor]){
+					 menor = j;
+				 } 
+			}
+			int temp = valor[menor];
+			valor[menor] = valor[i];
+			valor[i] = temp;
+		 }
+	}
+	
+	public  static void Consultar(int valor[]){
+		Ordenar(valor);
+		for (int x = 0; x < valor.length; x++) {
+			System.out.println(valor[x]);
+		}
+	}
+}
+
+
+
+
