@@ -1,0 +1,52 @@
+package Arvores;
+
+public class Arvore {
+
+	private static class ARVORE{
+		
+		public int num;
+		public ARVORE dir, esq;
+	}
+	
+	public static ARVORE Add(ARVORE aux, int num){
+		if (aux == null){
+			aux = new ARVORE();
+			aux.num = num;
+			aux.esq = null;
+			aux.dir = null;
+		}
+		else if(num < aux.num){
+			aux.esq = Add(aux.esq, num);
+		}
+		else{
+			aux.dir = Add(aux.dir,num );
+		}
+		return aux;
+	}
+	
+	public static void Listar(ARVORE aux){
+		if (aux != null){
+			Listar(aux.esq);
+			System.out.println(aux.num + " ," );
+			Listar(aux.dir);
+			
+		}
+	}
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		ARVORE arv = null;
+	       
+		arv = Add(arv, 1);
+		arv = Add(arv, 2);
+		arv = Add(arv, 3);
+       
+        System.out.print("Arv : ");
+        Listar(arv);
+        System.out.println();
+     }
+
+}
+;
