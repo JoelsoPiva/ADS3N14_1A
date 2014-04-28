@@ -1,0 +1,302 @@
+package arv;
+import java.io.*;
+import java.util.Scanner;
+
+public class Arv {
+	private No raiz;
+	private Arv noEsquerda;
+	private Arv noDireita;
+	 
+    public Arv() { }
+ 
+    public Arv getArvoreDireita() {
+        return noDireita;
+    }
+ 
+    public void setArvoreDireita(Arv noDireita) {
+        this.noDireita = noDireita;
+    }
+ 
+    public Arv getArvoreEsquerda() {
+        return noEsquerda;
+    }
+ 
+    public void setArvoreEsquerda(Arv noEsquerda) {
+        this.noEsquerda = noEsquerda;
+    }
+ 
+    public No getRaiz() {
+        return raiz;
+    }
+ 
+    public void setRaiz(No raiz) {
+        this.raiz = raiz;
+    }
+    
+    public void insereContato(int telefone, String nome) {
+        Contato contato = new Contato(telefone, nome);
+        No no = new No(contato);
+        inserir(no);
+    }
+    
+    public void inserir(No no) {
+        if (this.raiz == null) {
+            this.raiz = no;
+        } else {
+            if (no.getContato().getTelefone() > this.raiz.getContato().getTelefone()) {
+                if (this.noDireita == null) {
+                    this.noDireita = new Arv();
+                }
+                this.noDireita.inserir(no);
+            } else if (no.getContato().getTelefone() < this.raiz.getContato().getTelefone()) {
+                if (this.noEsquerda == null) {
+                    this.noEsquerda = new Arv();
+                }
+                this.noEsquerda.inserir(no);
+            }
+        }
+    }
+    //infixa
+    public void Infixa() {
+        if (this.raiz == null) {
+           return;
+        }
+ 
+        if (this.noEsquerda != null) {
+            this.noEsquerda.Infixa();
+        }
+ 
+        System.out.println("Nome: " + this.raiz.getContato().getNome());
+        System.out.println("Telefone: " + this.raiz.getContato().getTelefone());
+                
+        if (this.noDireita != null) {
+            this.noDireita.Infixa();
+        }
+    }
+    //prefixa
+    public void Prefixa() {
+        if (this.raiz == null) {
+           return;
+        }
+ 
+        System.out.println("Nome: " + this.raiz.getContato().getNome());
+        System.out.println("Telefone: " + this.raiz.getContato().getTelefone());
+        
+        if (this.noEsquerda != null) {
+            this.noEsquerda.Prefixa();
+        }
+ 
+        if (this.noDireita != null) {
+            this.noDireita.Prefixa();
+        }
+    }
+    //posfixa
+    public void Posfixa() {
+        if (this.raiz == null) {
+           return;
+        }
+ 
+        if (this.noEsquerda != null) {
+            this.noEsquerda.Posfixa();
+        }
+ 
+        if (this.noEsquerda != null) {
+            this.noDireita.Posfixa();
+        }
+        System.out.println("Nome: " + this.raiz.getContato().getNome());
+        System.out.println("Telefone: " + this.raiz.getContato().getTelefone());
+        
+    }
+    
+    public Contato buscaTelefone(int Telefone) {
+        if (this.raiz == null) {
+            return null;
+        } else {
+            if ( Telefone == this.raiz.getContato().getTelefone()) {
+                return this.raiz.getContato();
+            } else {
+                if (Telefone > this.raiz.getContato().getTelefone()) {
+                    if (this.noDireita == null) {
+                        return null;
+                    }
+                    return this.noDireita.buscaTelefone(Telefone);
+                } else {
+                    if (this.noEsquerda == null) {
+                        return null;
+                    }
+                    return this.noEsquerda.buscaTelefone(Telefone);
+                }
+            }
+        }
+    }
+ 
+    public class No {
+        private Contato contato;
+ 
+        public No(Contato contato) {
+            this.contato = contato;
+        }
+ 
+        public Contato getContato() {
+            return contato;
+        }
+ 
+        public void setContato(Contato contato) {
+            this.contato = contato;
+        }
+    }
+ 
+    public class Contato {
+        private int Telefone;
+        private String nome;
+ 
+        public Contato(int fone, String nome) {
+            this.Telefone = fone;
+            this.nome = nome;
+        }
+ 
+		public int getTelefone() {
+            return Telefone;
+        }
+		
+        public void setTelefone(int fone) {
+            this.Telefone = fone;
+        }
+ 
+        public String getNome() {
+            return nome;
+        }
+ 
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+    }
+    
+    public static void lerArquivoTexto(){
+    	FileReader fr = null;
+		try {
+			fr = new FileReader("\\d:contatos.txt");
+		} catch (FileNotFoundException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    	 
+    	BufferedReader br = new BufferedReader(fr);
+    	 
+    	try {
+    		Arv arvore = new Arv();
+		    
+			while (br.ready()) {
+				String linha = br.readLine();
+				int fone = Integer.parseInt(linha.split("#")[1]);
+				String nome = linha.split("#")[0];
+				
+				arvore.insereContato(fone,nome);
+				System.out.println(linha);
+			}
+		} catch (IOException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    	 
+    	try {
+			br.close();
+			fr.close();		
+		} catch (IOException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    
+    }
+    
+    public static void gravarArquivoTexto(Arv Arvore){
+    	
+    	if (Arvore.raiz == null) {
+      		System.out.println("Arvore vázia, não podemos gravar no arquivo texto.");
+      	    return;
+         }else{
+    		   File Arquivo = null;
+    	        try {
+    	            Arquivo = new File("\\d:contatos2.txt");
+    	            FileWriter fw = null;
+    	 
+    	            if (Arquivo.exists() == true) {
+    	                fw = new FileWriter(Arquivo, true);
+    	            } else {
+    	                fw = new FileWriter(Arquivo);
+    	            }
+    	 
+    	            BufferedWriter bw = new BufferedWriter(fw);
+    	            
+    	            
+    	             if (Arvore.noEsquerda != null) {
+    	            	 Arvore.noEsquerda.Infixa();
+    	             }
+    	      
+    	             bw.write(Arvore.raiz.getContato().getNome() + "#" + Arvore.raiz.getContato().getTelefone());
+    	                     
+    	             if (Arvore.noDireita != null) {
+    	            	 Arvore.noDireita.Infixa();
+    	             }
+    	            
+    	            bw.close();
+    	            fw.close();
+    	 
+    	        } catch (Exception e) {
+    	            System.err.println("Erro ao inserir gravra no arquivo: " + Arquivo);
+    	        }    		
+    		}
+    	}    
+    
+    public static void main(String[] args) {
+    	 int opcao;
+         Scanner entrada = new Scanner(System.in);
+         Arv arvore = new Arv();
+         do{
+        	 System.out.println("\tTRABALHO DE ARVORE BINARIA");
+             System.out.println("1. Ler arquivo texto e popular arvore.");
+             System.out.println("2. Pesquisa contato na arvore.");
+             System.out.println("3. Lista Pré-Fixa.");
+             System.out.println("4. Lista Infixa.");
+             System.out.println("5. Lista Pós-Fixa.");
+             System.out.println("6. Pesquisa por profundidade.");
+             System.out.println("7. Pesquisa por largura.");
+             System.out.println("8. Sair.");
+             System.out.println("Opcao:");
+             opcao = entrada.nextInt();
+             
+             switch(opcao){
+             case 1:
+                 lerArquivoTexto();
+                 if(arvore.getRaiz()!=null){
+                	 System.out.println("Arvore criada com sucesso!!!!");
+                 }
+                 break;
+                 
+             case 2:
+            	 System.out.println("Informe o nome para busca: ");
+            	 System.out.println(arvore.buscaTelefone(entrada.nextInt()).toString());
+                 break;                 
+             case 3:
+            	 arvore.Prefixa();
+                 break;
+                 
+             case 4:
+                 arvore.Infixa();
+                 break;
+             case 5: 
+            	 arvore.Posfixa();
+            	 break;
+             case 6:
+            	 break;
+             case 7:
+            	 break;
+             case 8:
+            	 gravarArquivoTexto(arvore);
+            	 
+             default:
+                 System.out.println("Opção inválida.");
+             }
+         } while(opcao != 8);
+    	
+    	
+    	lerArquivoTexto();	    		
+	}	    
+}
