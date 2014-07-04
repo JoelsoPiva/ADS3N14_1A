@@ -1,0 +1,179 @@
+package grafos;
+
+public class lista {
+	
+	String cidade;
+	String precedente;
+	int distancia;
+	Boolean fechado;
+	
+
+	public lista(){
+		fechado = false;
+	}
+	
+	
+	
+}
+
+
+
+package grafos;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.io.*;
+
+public class grafos {
+    public class Vertice {
+        String nome;
+        Boolean fechado ;
+        List<Aresta> adj;
+        
+	
+        Vertice(String nome) {
+            this.nome = nome;
+            this.adj = new ArrayList<Aresta>();
+        }
+
+        void addAdj(Aresta e) {
+            adj.add(e);
+        }
+    }
+
+    public class Aresta {
+        Vertice origem;
+        Vertice destino;
+        int peso;
+        
+        Aresta(Vertice origem, Vertice destino, int peso) {
+            this.origem = origem;
+            this.destino = destino;
+            this.peso = peso;
+        }
+    }
+
+    List<Vertice> vertices;
+    List<Aresta> arestas;
+
+    public grafos() {
+        vertices = new ArrayList<Vertice>();
+        arestas = new ArrayList<Aresta>();
+    }
+
+    Vertice addVertice(String nome) {
+        Vertice v = new Vertice(nome);
+        //v.fechado = false;
+        vertices.add(v);
+        return v;
+    }
+
+    Aresta addAresta(Vertice origem, Vertice destino, int peso) {
+        Aresta e = new Aresta(origem, destino, peso);
+        origem.addAdj(e);
+        arestas.add(e);
+        return e;
+    }
+
+    public String toString() {
+        String r = "";
+        for (Vertice u : vertices) {
+            r += u.nome + " -> ";
+            for (Aresta e : u.adj) {
+                Vertice v = e.destino;
+                r += v.nome + " P(" + e.peso +  "), ";
+            }
+            r += "\n";
+        }
+        return r;
+    }
+	
+    public static void lerArquivoTexto(){
+    	FileReader fr = null;
+		try {
+			fr = new FileReader("\\d:grafos.txt");
+		} catch (FileNotFoundException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    	 
+    	BufferedReader br = new BufferedReader(fr);
+    	 
+    	try {
+            //grafos g = new grafos();
+    		  		
+    		int countGrafo = 0;
+    		int countLinha = 0;
+    		
+			while (br.ready()) {
+				String linha = br.readLine();
+				if (countLinha == 1){
+					grafos g = new grafos();
+					
+					for(int T=0;T<countLinha;T++){
+						switch (T) {
+						case 1:
+							//Vertice s = g.addVertice("1");
+					        break;
+						case 2:
+							//Vertice u = g.addVertice("2");
+						    break;
+						case 3:
+						    //Vertice v = g.addVertice("3");
+						    break;
+						case 4:
+							//Vertice x = g.addVertice("4");
+							break;
+						case 5:
+							//Vertice y = g.addVertice("5");
+							break;
+						}				        						
+					}
+				/*	Aresta su = g.addAresta(s, u);
+			        Aresta sx = g.addAresta(s, x);
+			        Aresta xu = g.addAresta(x, u);
+			        Aresta xv = g.addAresta(x, v);
+			        Aresta xy = g.addAresta(x, y);
+			        Aresta yv = g.addAresta(y, v);
+			        */
+			   }
+				countLinha++;
+				
+				System.out.println(linha);
+			}
+		} catch (IOException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    	 
+    	try {
+			br.close();
+			fr.close();		
+		} catch (IOException erro) {
+			System.out.println(erro.getMessage().toString());
+		}
+    
+    }
+    
+    public static void buscaVizinhos(Vertice origem, Vertice destino, int peso) 
+    {
+         	
+    
+    }
+
+    public static void main(String[] args) {
+        grafos g = new grafos();
+        Vertice s = g.addVertice("1");
+        Vertice u = g.addVertice("2");
+        Vertice v = g.addVertice("3");
+        Vertice x = g.addVertice("4");
+        Vertice y = g.addVertice("5");
+        //Aresta ss= g.addAresta(s, s, 0);
+        Aresta su = g.addAresta(s, u,10);
+        Aresta sx = g.addAresta(s, x,5);
+        Aresta xu = g.addAresta(x, u,3);
+        Aresta xv = g.addAresta(x, v,9);
+        Aresta xy = g.addAresta(x, y, 2);
+        Aresta yv = g.addAresta(y, v, 6);
+        System.out.println(g);        
+    	/*lerArquivoTexto();*/
+    }
+}
